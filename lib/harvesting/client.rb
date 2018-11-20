@@ -30,6 +30,10 @@ module Harvesting
       end
     end
 
+    def company
+      Harvesting::Models::Company.new(get("company"), client: self)
+    end
+
     def contacts
       get("contacts")["contacts"].map do |result|
         Harvesting::Models::Contact.new(result, client: self)
