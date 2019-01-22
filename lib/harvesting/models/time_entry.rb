@@ -1,12 +1,10 @@
 module Harvesting
   module Models
-    class TimeEntry < Base
+    class TimeEntry < HarvestRecord
       attributed :id,
                  :spent_date,
                  :hours,
                  :notes,
-                 :created_at,
-                 :updated_at,
                  :is_locked,
                  :locked_reason,
                  :is_closed,
@@ -19,19 +17,25 @@ module Harvesting
                  :budgeted,
                  :billable_rate,
                  :cost_rate,
-                 :task_id,
                  :invoice,
                  :external_reference,
-                 :user_assignment, # temporarily return the hash itself until the model is added
-                 :task_assignment # temporarily return the hash itself until the model is added
+                 :created_at,
+                 :updated_at,
+                 :user_assignment # temporarily return the hash itself until the model is added
 
       modeled project: Project,
               user: User,
               task: Task,
-              client: Client
+              client: Client,
+              task_assignment: TaskAssignment
+
 
       def path
-        id.nil? ? "time_entries" : "time_entries/#{id}"
+        @attributes['id'].nil? ? "time_entries" : "time_entries/#{@attributes['id']}"
+      end
+
+      def to_hash
+        { project_id: project.id, task_id: task.id, user_id: user.id }.merge(super)
       end
 
     end

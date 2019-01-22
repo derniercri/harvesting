@@ -1,6 +1,6 @@
 module Harvesting
   module Models
-    class Contact < Base
+    class Contact < HarvestRecord
       attributed :id,
                  :title,
                  :first_name,
@@ -12,12 +12,14 @@ module Harvesting
                  :created_at,
                  :updated_at
 
+      modeled client: Client
+
       def path
-        id.nil? ? "contacts" : "contacts/#{id}"
+        @attributes['id'].nil? ? "contacts" : "contacts/#{@attributes['id']}"
       end
 
-      def client
-        @client = Client.new(@attributes["client"], client: harvest_client)
+      def to_hash
+        { client_id: client.id }.merge(super)
       end
     end
   end

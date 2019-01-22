@@ -1,6 +1,6 @@
 module Harvesting
   module Models
-    class Project < Base
+    class Project < HarvestRecord
       attributed :id,
                  :name,
                  :code,
@@ -11,6 +11,7 @@ module Harvesting
                  :hourly_rate,
                  :budget,
                  :budget_by,
+                 :budget_is_monthly,
                  :notify_when_over_budget,
                  :over_budget_notification_percentage,
                  :over_budget_notification_date,
@@ -27,7 +28,11 @@ module Harvesting
       modeled client: Client
 
       def path
-        id.nil? ? "projects" : "projects/#{id}"
+        @attributes['id'].nil? ? "projects" : "projects/#{@attributes['id']}"
+      end
+
+      def to_hash
+        { client_id: client.id }.merge(super)
       end
     end
   end

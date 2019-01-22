@@ -8,9 +8,7 @@ module Harvesting
 
     attr_accessor :access_token, :account_id
 
-    #
     # @param opts
-    #
     def initialize(access_token: ENV['HARVEST_ACCESS_TOKEN'], account_id: ENV['HARVEST_ACCOUNT_ID'])
       @access_token = access_token.to_s
       @account_id = account_id.to_s
@@ -86,8 +84,6 @@ module Harvesting
       raise UnprocessableRequest(response.to_s) unless response.code.to_i == 200
     end
 
-    private
-
     def get(path, opts = {})
       url = "#{DEFAULT_HOST}/#{path}"
       url += "?#{opts.map {|k, v| "#{k}=#{v}"}.join("&")}" if opts.any?
@@ -95,6 +91,8 @@ module Harvesting
       response = http_response(:get, uri)
       JSON.parse(response.body)
     end
+
+    private
 
     def http_response(method, uri, opts = {})
       response = nil

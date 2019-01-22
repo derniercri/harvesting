@@ -21,3 +21,6 @@
 
 # ruby versions
 .ruby-version
+
+.idea/
+harvesting.iml
